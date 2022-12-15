@@ -80,6 +80,18 @@ jobs:
       run: |
         aws ecr describe-images --repository-name $ECR_REPOSITORY --region $AWS_REGION | jq -r '.imageDetails[] | select(.imagePushedAt < (now - 86400)) | .imageDigest' | xargs -I {} aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageDigest={} --region $AWS_REGION
 
+
+
+
+
+    - name: download task definition
+      run: |
+        aws s3 cp s3://simplecicd-flask/task-definition.json .aws/task-definition.json
+
+
+
+
+
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
