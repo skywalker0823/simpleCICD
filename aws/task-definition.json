@@ -5,7 +5,7 @@
 
         {
 
-            "name": "simpleContainer",
+            "name": "simpleCICDContainer",
 
             "image": "766995240060.dkr.ecr.us-west-2.amazonaws.com/simplecicd-flask:latest",
 
@@ -30,6 +30,6 @@
         }
 
     ],
-    "family": "simpleContainer"
+    "family": "simpleCICDContainer"
 
 }

@@ -33,11 +33,11 @@ on:
 env:
   AWS_REGION: us-west-2               # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: simplecicd-flask         # set this to your Amazon ECR repository name
-  ECS_SERVICE: simpleService                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: simpleCluster                 # set this to your Amazon ECS cluster name
+  ECS_SERVICE: simpleCICDService                 # set this to your Amazon ECS service name
+  ECS_CLUSTER: simpleCICDCluster                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ./aws/task-definition.json # set this to the path to your Amazon ECS task definition
   #                                              # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: simpleContainer           # set this to the name of the container in the
+  CONTAINER_NAME: simpleCICDContainer           # set this to the name of the container in the
   #                                              # containerDefinitions section of your task definition
 
 permissions:
@@ -83,14 +83,16 @@ jobs:
         aws ecr describe-images --repository-name $ECR_REPOSITORY --region $AWS_REGION | jq -r '.imageDetails[] | select(.imagePushedAt < (now - 86400)) | .imageDigest' | xargs -I {} aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageDigest={} --region $AWS_REGION
 
 
-    # - name: Fill in the new image ID in the Amazon ECS task definition
-    #   id: task-def
-    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-    #   with:
-    #     task-definition: ${{ env.ECS_TASK_DEFINITION }}
-    #     container-name: ${{ env.CONTAINER_NAME }}
-    #     image: ${{ steps.build-image.outputs.image }}
+    # 該步驟會添加新的 image ID 到 task definition
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
 
+    # 該步驟會更新 Amazon ECS service
     # - name: Deploy Amazon ECS task definition
     #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
     #   with:
