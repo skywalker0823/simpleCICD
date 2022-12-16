@@ -5,23 +5,23 @@
 
         {
 
-        "name": "my-app",
+            "name": "simpleContainer",
 
-        "image": "my-app:latest",
+            "image": "766995240060.dkr.ecr.us-west-2.amazonaws.com/simplecicd-flask:4c6fcda887c867a4be0872fe9e291bab076f7490",
 
-        "cpu": 1,
+            "cpu": 1,
 
-        "memory": 256,
+            "memory": 256,
 
-        "essential": true,
+            "essential": true,
 
-        "portMappings": [
+            "portMappings": [
 
                 {
                 
-                "containerPort": 3000,
-                
-                "hostPort": 3000
+                    "containerPort": 3000,
+                    
+                    "hostPort": 3000
                 
                 }
             
